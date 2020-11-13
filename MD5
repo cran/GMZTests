@@ -1,0 +1,16 @@
+19d5de108d1d904d7da15586f8f818c3 *DESCRIPTION
+27332b4a56ba2b13cb2c618494604359 *NAMESPACE
+c262f4d983920e0fa19e72a2894a0efa *R/DFA_test.r
+3172f7b220e37e479762fbb25e0b6525 *R/DMC_test.R
+ae1e21582f191f884b3436325e45aa7a *R/Delta_DMC_test.R
+bde5a8ebc3ef9735aeddd8a7676dbf4d *R/Delta_dmca.R
+7dc2b9817b91dba34c3555d656b6d367 *R/Delta_rhodcca_test.R
+f7e6e9e28bf6c579bb2514ceb8acee51 *R/dmca_test.R
+248db0477d1e4ba5ce2bc8e4b17834cb *R/rhodcca_test.R
+87a806041b780efde1ca675590055115 *man/deltadmc.test.Rd
+4f3095f87fcd595fbe96c1c23ff0818a *man/deltadmca.test.Rd
+6b0b1952cab52c4ad71caf89800c6d0d *man/deltarhodcca.test.Rd
+a3362c2c729d0ccfc1cfb557845ba384 *man/dfa.test.Rd
+c4279a398e044b4a86c9143980870565 *man/dmc.test.Rd
+698a16a7ca2b2310b73a837a3e0f02f4 *man/dmca.test.Rd
+18e41b84cfae481ab485a0589c6b5054 *man/rhodcca.test.Rd

@@ -4,13 +4,15 @@
 \alias{dmca.test}
 \title{Statistical test for DMCA cross-correlation coefficient.}
 \usage{
-dmca.test(N, k, rep)
+dmca.test(N, k, m, rep)
 }
 \arguments{
 \item{N}{An integer value for the time series length.}
 
 \item{k}{An integer value indicating the boundary of the division \eqn{(N/k)}.
 The smallest value of \eqn{k} is \eqn{4}.}
+
+\item{m}{an integer value or a vector of integer values indicating the size of the window for the polinomial fit.}
 
 \item{rep}{An integer value indicating the number of repetitions.}
 }
@@ -24,7 +26,7 @@ This function performs the statistical test for Detrending moving-average cross-
 This function include following measures: timescale and cross-correlation yx.
 }
 \examples{
-dmca.test(N=100, k=10, rep=10)
+dmca.test(N=100, k=10, m=c(4:6), rep=10)
 
 }
 \references{

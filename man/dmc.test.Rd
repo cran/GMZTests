@@ -4,13 +4,15 @@
 \alias{dmc.test}
 \title{Statistical test for Multiple Detrended Cross-Correlation Coefficient}
 \usage{
-dmc.test(N, k, method, nu, rep)
+dmc.test(N, k, m, method, nu, rep)
 }
 \arguments{
 \item{N}{An integer value for the time series length.}
 
 \item{k}{An integer value indicating the boundary of the division \eqn{(N/k)}.
 The smallest value of \eqn{k} is \eqn{4}.}
+
+\item{m}{an integer value or a vector of integer values indicating the size of the window for the polinomial fit.}
 
 \item{method}{A character string indicating which correlation coefficient is to be used. If method = "rhodcca" the dmc coefficient is generated from the DCCA coefficient. If method = "dmca", the dmc coefficient is generated from the DMCA coefficient.}
 
@@ -28,7 +30,8 @@ This function performs the statistical test for DMC Cross-Correlation Coefficien
 This function include following measures: w, timescale, dmc, rhodcca_yx1, rhodcca_yx2, rhodcca_x1x2
 }
 \examples{
-dmc.test(N=100, k=10, method="rhodcca", nu=0, rep=10)
+dmc.test(N=100, k=10, m=c(4:6), method="rhodcca", nu=0, rep=10)
+dmc.test(N=100, k=10, m=c(4:6), method="dmca", nu=0, rep=10)
 
 }
 \references{

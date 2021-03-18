@@ -4,7 +4,7 @@
 \alias{deltadmca.test}
 \title{Statistical test for Statistical test for DMCA cross-correlation coefficient.}
 \usage{
-deltadmca.test(x, y, k, rep)
+deltadmca.test(x, y, k, m, rep)
 }
 \arguments{
 \item{x}{A vector containing univariate time series.}
@@ -13,6 +13,8 @@ deltadmca.test(x, y, k, rep)
 
 \item{k}{An integer value indicating the boundary of the division \eqn{(N/k)}.
 The smallest value of \eqn{k} is \eqn{4}.}
+
+\item{m}{an integer value or a vector of integer values indicating the size of the window for the polinomial fit.}
 
 \item{rep}{An integer value indicating the number of repetitions.}
 }
@@ -28,7 +30,7 @@ This function include following measures: timescale, rho_before, rho_affter, del
 \examples{
 x <- rnorm(1000)
 y <-  rnorm(1000)
-deltadmca.test(x,y,k=100,rep=10)
+deltadmca.test(x,y,k=100,m=c(4:6),rep=10)
 
 }
 \references{

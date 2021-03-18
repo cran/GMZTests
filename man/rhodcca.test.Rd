@@ -4,13 +4,15 @@
 \alias{rhodcca.test}
 \title{Statistical test for detrended cross-correlation coefficient}
 \usage{
-rhodcca.test(N, k, nu, rep)
+rhodcca.test(N, k, m, nu, rep)
 }
 \arguments{
 \item{N}{An integer value for the time series length.}
 
 \item{k}{An integer value indicating the boundary of the division \eqn{(N/k)}.
 The smallest value of \eqn{k} is \eqn{4}.}
+
+\item{m}{an integer value or a vector of integer values indicating the size of the window for the polinomial fit.}
 
 \item{nu}{An integer value. See the DCCA package.}
 
@@ -26,7 +28,7 @@ This function performs the statistical test for RHODCCA cross-correlation coeffi
 This function include following measures: timescale and cross-correlation yx.
 }
 \examples{
-rhodcca.test(N=100, k=10, nu=0, rep=10)
+rhodcca.test(N=100, k=10, m=c(4:6), nu=0, rep=10)
 
 }
 \references{

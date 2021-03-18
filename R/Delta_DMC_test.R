@@ -13,6 +13,8 @@
 #' @param k An integer value indicating the boundary of the division \eqn{(N/k)}.
 #'          The smallest value of \eqn{k} is \eqn{4}.
 #'
+#' @param m an integer value or a vector of integer values indicating the size of the window for the polinomial fit.
+#'
 #' @param nu An integer value. See the DCCA package.
 #'
 #' @param rep An integer value indicating the number of repetitions.
@@ -22,11 +24,13 @@
 #' @return An list containing "timescale" "dmc_before", "dmc_after", "deltadmc", "CI_0.90", "CI_0.95", "CI_0.99".
 #'
 #' @examples
-#' x1 <- rnorm(1000)
-#' x2 <- rnorm(1000)
-#' y <-  rnorm(1000)
-#' deltadmc.test(x1,x2,y, k=100, nu=0, rep=10, method="rhodcca")
+#' x1 <- rnorm(100)
+#' x2 <- rnorm(100)
+#' y <-  rnorm(100)
+#' deltadmc.test(x1,x2,y, k=10, m=c(4:6), nu=0, rep=10, method="rhodcca")
 #'
+#' deltadmc.test(x1,x2,y, k=10, m=c(4:6), nu=0, rep=10, method="dmca")
+
 #' @references
 #' ZEBENDE, G.F.; SILVA-FILHO, A.M. Detrended Multiple Cross-Correlation Coefficient. PHYSICA A, v.510, p.91-97, 2018.
 #'
@@ -39,15 +43,13 @@
 #' @importFrom fgpt fyshuffle
 #'
 #' @export
-deltadmc.test <- function(x1,x2,y,k,nu,rep,method){
+deltadmc.test <- function(x1,x2,y,k,m,nu,rep,method){
 
   Nx1 <- length(x1)
   Nx2 <- length(x2)
   Ny <- length(y)
   N1 <- Nx1/2
   N2 <- N1+1
-
-  n <- 4:round(N1/k,0)
 
   if(!(is.null(y) || is.numeric(y) || is.logical(y))){
     stop("Time series must be numeric")
@@ -68,15 +70,15 @@ deltadmc.test <- function(x1,x2,y,k,nu,rep,method){
     stop("Time series have different lengths")
   }
 
-    yx1a <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-    yx1d <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-    yx2a <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-    yx2d <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-   x1x2a <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-   x1x2d <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-   dmcat <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-   dmcdp <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
-deltadmc <- matrix(data = NA, nrow = rep, ncol = length(n), byrow = TRUE)
+    yx1a <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+    yx1d <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+    yx2a <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+    yx2d <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+   x1x2a <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+   x1x2d <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+   dmcat <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+   dmcdp <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
+deltadmc <- matrix(data = NA, nrow = rep, ncol = length(m), byrow = TRUE)
 
 if(method =='rhodcca'){
    for(i in 1:rep){
@@ -94,15 +96,15 @@ if(method =='rhodcca'){
        ya <- y[1:N1]
        yd <- y[N2:Nx1]
 
-    for(j in 1:length(n)){
-         yx1a[i,j] <- DCCA::rhodcca(ya[shuf3], x1a[shuf1], m = n[j], nu = nu, overlap = TRUE)$rhodcca #antes
-         yx1d[i,j] <- DCCA::rhodcca(yd[shuf3], x1d[shuf1], m = n[j], nu = nu, overlap = TRUE)$rhodcca #depois
+    for(j in 1:length(m)){
+         yx1a[i,j] <- DCCA::rhodcca(ya[shuf3], x1a[shuf1], m[j], nu = nu, overlap = TRUE)$rhodcca #antes
+         yx1d[i,j] <- DCCA::rhodcca(yd[shuf3], x1d[shuf1], m[j], nu = nu, overlap = TRUE)$rhodcca #depois
 
-		     yx2a[i,j] <- DCCA::rhodcca(ya[shuf3], x2a[shuf2], m = n[j], nu = nu, overlap = TRUE)$rhodcca
-		     yx2d[i,j] <- DCCA::rhodcca(yd[shuf3], x2d[shuf2], m = n[j], nu = nu, overlap = TRUE)$rhodcca
+		     yx2a[i,j] <- DCCA::rhodcca(ya[shuf3], x2a[shuf2], m[j], nu = nu, overlap = TRUE)$rhodcca
+		     yx2d[i,j] <- DCCA::rhodcca(yd[shuf3], x2d[shuf2], m[j], nu = nu, overlap = TRUE)$rhodcca
 
-		    x1x2a[i,j] <- DCCA::rhodcca(x1a[shuf1], x2a[shuf2], m = n[j], nu = nu, overlap = TRUE)$rhodcca
-		    x1x2d[i,j] <- DCCA::rhodcca(x1d[shuf1], x2d[shuf2], m = n[j], nu = nu, overlap = TRUE)$rhodcca
+		    x1x2a[i,j] <- DCCA::rhodcca(x1a[shuf1], x2a[shuf2], m[j], nu = nu, overlap = TRUE)$rhodcca
+		    x1x2d[i,j] <- DCCA::rhodcca(x1d[shuf1], x2d[shuf2], m[j], nu = nu, overlap = TRUE)$rhodcca
 
 		    dmcat[i,j] <- (yx1a[i,j]^2 + yx2a[i,j]^2-(2*yx1a[i,j]*yx2a[i,j]*x1x2a[i,j]))/(1-x1x2a[i,j]^2)
 		    dmcdp[i,j] <- (yx1d[i,j]^2 + yx2d[i,j]^2-(2*yx1d[i,j]*yx2d[i,j]*x1x2d[i,j]))/(1-x1x2d[i,j]^2)
@@ -113,17 +115,17 @@ if(method =='rhodcca'){
 
   if(method =='dmca'){
 
-    dmca <- function(x,y,n){
+    dmca <- function(x,y,m){
       xx <- cumsum(x)
       yy <- cumsum(y)
 
-      mm <- c(rep(1,n))/n
+      mm <- c(rep(1,m))/m
       mm_x <- stats::filter(xx,mm)
       mm_y <- stats::filter(yy,mm)
 
-      F2_xy <- mean((xx-mm_x)[(1+floor(n/2)):(length(xx)-floor(n/2))]*(yy-mm_y)[(1+floor(n/2)):(length(yy)-floor(n/2))])
-      F2_xx <- mean((xx-mm_x)[(1+floor(n/2)):(length(xx)-floor(n/2))]*(xx-mm_x)[(1+floor(n/2)):(length(xx)-floor(n/2))])
-      F2_yy <- mean((yy-mm_y)[(1+floor(n/2)):(length(yy)-floor(n/2))]*(yy-mm_y)[(1+floor(n/2)):(length(yy)-floor(n/2))])
+      F2_xy <- mean((xx-mm_x)[(1+floor(m/2)):(length(xx)-floor(m/2))]*(yy-mm_y)[(1+floor(m/2)):(length(yy)-floor(m/2))])
+      F2_xx <- mean((xx-mm_x)[(1+floor(m/2)):(length(xx)-floor(m/2))]*(xx-mm_x)[(1+floor(m/2)):(length(xx)-floor(m/2))])
+      F2_yy <- mean((yy-mm_y)[(1+floor(m/2)):(length(yy)-floor(m/2))]*(yy-mm_y)[(1+floor(m/2)):(length(yy)-floor(m/2))])
 
       rho <- F2_xy/sqrt(F2_xx*F2_yy)
       return(rho)
@@ -144,41 +146,33 @@ if(method =='rhodcca'){
       ya <- y[1:N1]
       yd <- y[N2:Nx1]
 
-    for(j in 1:length(n)){
-       yx1a[i,j] <- dmca(ya[shuf3], x1a[shuf1], n = n[j])
-       yx1d[i,j] <- dmca(yd[shuf3], x1d[shuf1], n = n[j])
+    for(j in 1:length(m)){
+       yx1a[i,j] <- dmca(ya[shuf3], x1a[shuf1], m[j])
+       yx1d[i,j] <- dmca(yd[shuf3], x1d[shuf1], m[j])
 
-       yx2a[i,j] <- dmca(ya[shuf3], x2a[shuf2], n = n[j])
-       yx2d[i,j] <- dmca(yd[shuf3], x2d[shuf2], n = n[j])
+       yx2a[i,j] <- dmca(ya[shuf3], x2a[shuf2], m[j])
+       yx2d[i,j] <- dmca(yd[shuf3], x2d[shuf2], m[j])
 
-      x1x2a[i,j] <- dmca(x1a[shuf1], x2a[shuf2], n = n[j])
-      x1x2d[i,j] <- dmca(x1d[shuf1], x2d[shuf2], n = n[j])
+      x1x2a[i,j] <- dmca(x1a[shuf1], x2a[shuf2], m[j])
+      x1x2d[i,j] <- dmca(x1d[shuf1], x2d[shuf2], m[j])
 
       dmcat[i,j] <- (yx1a[i,j]^2 + yx2a[i,j]^2-(2*yx1a[i,j]*yx2a[i,j]*x1x2a[i,j]))/(1-x1x2a[i,j]^2)
       dmcdp[i,j] <- (yx1d[i,j]^2 + yx2d[i,j]^2-(2*yx1d[i,j]*yx2d[i,j]*x1x2d[i,j]))/(1-x1x2d[i,j]^2)
-      deltadmc[i,j] <- (dmcdp[i,j] - dmcat[i,j])
+   deltadmc[i,j] <- (dmcdp[i,j] - dmcat[i,j])
     }
   }
 }
-   m <- c()
-   s <- c()
-   CI1 <- c()
-   CI2 <- c()
-   CI3 <- c()
 
-   for(i in 1:ncol(deltadmc)){
+            mean <- apply(deltadmc, 2, mean)
+              sd <- apply(deltadmc, 2, sd)
 
-     m[i] <- mean(deltadmc[,i])
-     s[i] <- stats::sd((deltadmc[,i]))
+             CI1 <- stats::qnorm(c(0.90+((1-0.90)/2)), 0,1)*sd
+             CI2 <- stats::qnorm(c(0.95+((1-0.95)/2)), 0,1)*sd
+             CI3 <- stats::qnorm(c(0.99+((1-0.99)/2)), 0,1)*sd
 
-     CI1[i] <- stats::qnorm(c(0.90+((1-0.90)/2)), 0,1)*s[i]
-     CI2[i] <- stats::qnorm(c(0.95+((1-0.95)/2)), 0,1)*s[i]
-     CI3[i] <- stats::qnorm(c(0.99+((1-0.99)/2)), 0,1)*s[i]
-   }
-
-   return(list(timescale=n,
-               mean = m,
-               sd = s,
+   return(list(timescale=m,
+               mean = mean,
+               sd = sd,
                dmc_before = dmcat,
                dmc_after = dmcdp,
                deltadmc=deltadmc,

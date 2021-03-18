@@ -4,7 +4,7 @@
 \alias{deltadmc.test}
 \title{Statistical test for Delta DMC Multiple Detrended Cross-Correlation Coefficient}
 \usage{
-deltadmc.test(x1, x2, y, k, nu, rep, method)
+deltadmc.test(x1, x2, y, k, m, nu, rep, method)
 }
 \arguments{
 \item{x1}{A vector containing univariate time series.}
@@ -15,6 +15,8 @@ deltadmc.test(x1, x2, y, k, nu, rep, method)
 
 \item{k}{An integer value indicating the boundary of the division \eqn{(N/k)}.
 The smallest value of \eqn{k} is \eqn{4}.}
+
+\item{m}{an integer value or a vector of integer values indicating the size of the window for the polinomial fit.}
 
 \item{nu}{An integer value. See the DCCA package.}
 
@@ -32,11 +34,12 @@ This function performs the statistical test for Delta DMC cross-correlation coef
 This function include following measures: timescale, dmc_before, dmc_after, deltadmc
 }
 \examples{
-x1 <- rnorm(1000)
-x2 <- rnorm(1000)
-y <-  rnorm(1000)
-deltadmc.test(x1,x2,y, k=100, nu=0, rep=10, method="rhodcca")
+x1 <- rnorm(100)
+x2 <- rnorm(100)
+y <-  rnorm(100)
+deltadmc.test(x1,x2,y, k=10, m=c(4:6), nu=0, rep=10, method="rhodcca")
 
+deltadmc.test(x1,x2,y, k=10, m=c(4:6), nu=0, rep=10, method="dmca")
 }
 \references{
 ZEBENDE, G.F.; SILVA-FILHO, A.M. Detrended Multiple Cross-Correlation Coefficient. PHYSICA A, v.510, p.91-97, 2018.

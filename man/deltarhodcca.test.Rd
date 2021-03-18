@@ -4,7 +4,7 @@
 \alias{deltarhodcca.test}
 \title{Statistical test for Statistical test for Delta RHODCCA cross-correlation coefficient.}
 \usage{
-deltarhodcca.test(x, y, k, nu, rep)
+deltarhodcca.test(x, y, k, m, nu, rep)
 }
 \arguments{
 \item{x}{A vector containing univariate time series.}
@@ -13,6 +13,8 @@ deltarhodcca.test(x, y, k, nu, rep)
 
 \item{k}{An integer value indicating the boundary of the division \eqn{(N/k)}.
 The smallest value of \eqn{k} is \eqn{4}.}
+
+\item{m}{an integer value or a vector of integer values indicating the size of the window for the polinomial fit.}
 
 \item{nu}{An integer value. See the DCCA package.}
 
@@ -30,7 +32,7 @@ This function include following measures: timescale, rho_before, rho_affter, del
 \examples{
 x <- rnorm(1000)
 y <-  rnorm(1000)
-deltarhodcca.test(x,y, k=100, nu=0, rep=10)
+deltarhodcca.test(x,y,k=100,m=c(4:6),nu=0,rep=10)
 
 }
 \references{
